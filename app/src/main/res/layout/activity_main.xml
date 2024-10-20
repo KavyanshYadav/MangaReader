@@ -5,51 +5,92 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#101010"
     tools:context=".MainActivity">
+
 
     <Button
         android:id="@+id/nextbtn"
-        android:layout_width="127dp"
-        android:layout_height="77dp"
-        android:text="Go to next"
+        android:layout_width="111dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="41dp"
+        android:layout_marginBottom="84dp"
+        android:text="login"
+        app:layout_constraintBottom_toTopOf="@+id/googlelogin"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/button2"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="328dp"
-        android:text="second"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="100dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="36dp"
+        android:text="about"
+        app:layout_constraintEnd_toStartOf="@+id/nextbtn"
+        app:layout_constraintHorizontal_bias="0.522"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nextbtn" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="409dp"
         android:layout_height="250dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="76dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
-        app:layout_constraintTop_toBottomOf="@+id/nextbtn"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
         tools:layout_editor_absoluteX="1dp">
 
         <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:ems="10"
-            android:inputType="text|textEmailAddress|textAutoComplete" />
+            android:inputType="text|textEmailAddress|textAutoComplete"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#F6F6F6" />
 
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:ems="10"
             android:inputType="text"
-            android:text="password" />
+            android:text="password"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#F6F6F6" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/googlelogin"
+        android:layout_width="279dp"
+        android:layout_height="88dp"
+        android:layout_marginTop="84dp"
+        android:text="Google"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button2"
+        app:layout_constraintVertical_bias="0.021" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="229dp"
+        android:layout_height="78dp"
+        android:layout_marginTop="20dp"
+        android:text="Attend"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textIsSelectable="false"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.47" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
