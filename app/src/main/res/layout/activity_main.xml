@@ -37,44 +37,59 @@
         android:id="@+id/linearLayout"
         android:layout_width="409dp"
         android:layout_height="250dp"
+        android:layout_marginStart="1dp"
         android:layout_marginTop="76dp"
+        android:layout_marginEnd="1dp"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        tools:layout_editor_absoluteX="1dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2">
 
-        <EditText
-            android:id="@+id/email"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:ems="10"
-            android:inputType="text|textEmailAddress|textAutoComplete"
-            android:textColor="#FFFFFF"
-            android:textColorHighlight="#F6F6F6" />
+            android:layout_margin="16dp"
+            android:hint="Email">
 
-        <EditText
-            android:id="@+id/password"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:ems="10"
-            android:inputType="text"
-            android:text="password"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#F6F6F6" />
+            android:layout_margin="16dp"
+            android:hint="password">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="password"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
 
     <Button
         android:id="@+id/googlelogin"
-        android:layout_width="279dp"
-        android:layout_height="88dp"
-        android:layout_marginTop="84dp"
+        android:layout_width="151dp"
+        android:layout_height="46dp"
+        android:background="#C77474"
         android:text="Google"
+        android:textColor="#212121"
+        app:icon="@drawable/googleg_standard_color_18"
+        app:iconSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button2"
-        app:layout_constraintVertical_bias="0.021" />
+        app:layout_constraintVertical_bias="0.171" />
 
     <TextView
         android:id="@+id/textView2"

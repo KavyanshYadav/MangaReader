@@ -44,6 +44,15 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation ("com.google.android.gms:play-services-auth:20.7.0")
     implementation ("com.google.android.material:material:1.9.0")
+    implementation ("androidx.appcompat:appcompat:1.6.0")
+    implementation ("com.fasterxml.jackson.core:jackson-databind:2.15.2")
+    implementation ("org.jsoup:jsoup:1.16.1")
+    implementation ("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation ("androidx.recyclerview:recyclerview:1.2.1")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+
+
 
     implementation(libs.activity)
     implementation(libs.constraintlayout)
