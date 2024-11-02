@@ -60,12 +60,17 @@ public class MainActivity3 extends AppCompatActivity {
         protected void onPostExecute(ArrayList<MangaKakrotScraper.LessinformationSchema> result) {
             if (result != null && !result.isEmpty()) {
                 List<String> imageUrls = new ArrayList<>();
+                List<String> imageID = new ArrayList<>();
+
                 for (MangaKakrotScraper.LessinformationSchema schema : result) {
-                    imageUrls.add(schema.ImageUrl);  // assuming `getImageUrl()` exists
+                    imageUrls.add(schema.ImageUrl);
+                    imageID.add(schema.ID);
+                    // assuming `getImageUrl()` exists
                 }
 
                 // Update the RecyclerView adapter with the new URLs
-                adapter.updateImageUrls(imageUrls);
+
+                adapter.updateImageUrls(imageUrls,imageID);
             } else {
                 Log.d("MangaReader1", "No recent chapters found or failed to fetch.");
             }
@@ -116,7 +121,7 @@ public class MainActivity3 extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         // Initialize adapter with empty list
-        adapter = new ImageAdapter(this, new ArrayList<>());
+        adapter = new ImageAdapter(this, new ArrayList<>(),new ArrayList<>());
         recyclerView.setAdapter(adapter);
 
         // Fetch chapters (including image URLs)

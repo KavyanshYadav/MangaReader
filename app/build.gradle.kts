@@ -47,9 +47,12 @@ dependencies {
     implementation ("androidx.appcompat:appcompat:1.6.0")
     implementation ("com.fasterxml.jackson.core:jackson-databind:2.15.2")
     implementation ("org.jsoup:jsoup:1.16.1")
-    implementation ("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.1")
     implementation ("androidx.recyclerview:recyclerview:1.2.1")
     implementation ("com.github.bumptech.glide:glide:4.12.0")
+    implementation ("com.squareup.picasso:picasso:2.8")
+//    implementation ("com.github.Chalifa:PhotoView:2.3.0")
+
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
 
 

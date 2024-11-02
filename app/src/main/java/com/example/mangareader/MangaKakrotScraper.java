@@ -1,4 +1,6 @@
 package com.example.mangareader;
+import android.util.Log;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -148,7 +150,7 @@ public class MangaKakrotScraper {
     }
 
 
-    public String GetMangaInfo (String Html) throws IOException , InterruptedException {
+    public MoreinformationSchema GetMangaInfo (String Html) throws IOException , InterruptedException {
         Document doc = Jsoup.parse(Html);
         MoreinformationSchema mainreturn = new MoreinformationSchema("", "", "Html", "Html", "Html", 0, null, "Html", "Html", "Html", "Html", null, 0);
         Element Mainbody = doc.getElementsByClass("panel-story-info").first();
@@ -170,7 +172,8 @@ public class MangaKakrotScraper {
         mainreturn.Title =  n.select("h1").first().text();
         // System.out.println(ChapterArrayJson);
         String retu = Json.writeValueAsString(mainreturn);
-        return retu;
+        Log.d("Scraper" , "return:" + retu);
+        return mainreturn;
 
     }
 }

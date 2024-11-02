@@ -1,6 +1,8 @@
 package com.example.mangareader;
 
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import okhttp3.OkHttpClient;
@@ -32,13 +34,68 @@ public class HttpRes {
                 .get()
                 .build();
 
+
+
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
             // Ensure a non-null return
             ArrayList<MangaKakrotScraper.LessinformationSchema> result = scraper.GetRecentChapters(response.body().string());
+            if (result == null) {
+
+            }
             return result != null ? result : new ArrayList<>();
         }catch (Exception e) {
+            throw new IOException("Unexpected code " + e);
+        }
+    }
+
+    public MangaKakrotScraper.MoreinformationSchema getMangaDetails(String MangaID) throws  IOException {
+        Log.d("Scraper", "GettingManga: " + MangaID);
+        Log.d("Scraper", "GettingManga: " + "https://manganato.com/manga-"+MangaID);
+//        Request request = new Request.Builder()
+//                .url("https://manganato.com/manga-"+MangaID)
+//                .get()
+//                .build();
+        Request request = new Request.Builder()
+                .url("https://chapmanganato.to/manga-"+MangaID)
+                .get()
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+            // Ensure a non-null return
+           MangaKakrotScraper.MoreinformationSchema result = scraper.GetMangaInfo(response.body().string());
+//           if (result ==null){
+//               Log.d("Scraper", "Scrapping from Site 2");
+//               Response response2 = client.newCall(request2).execute();
+//               if (!response2.isSuccessful()) throw new IOException("Unexpected code " + response2);
+//               result = scraper.GetMangaInfo(response2.body().string());
+//           }
+           Log.d("MangaReader1", "Result: " + result);
+            return result;
+        }catch (Exception e) {
+            Log.d("MangaReader1", "failed to fetch ");
+
+            throw new IOException("Unexpected code " + e);
+        }
+    }
+
+    public ArrayList<String> getImageHtml(String ChapterUrl) throws IOException{
+        Request request = new Request.Builder()
+                .url(ChapterUrl)
+                .get()
+                .build();
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+            // Ensure a non-null return
+            ArrayList<String> result = scraper.GetChapterImages(response.body().string());
+//            Log.d("MangaReader1", "Result: " + result);
+            return result ;
+        }catch (Exception e) {
+//            Log.d("MangaReader1", "failed to fetch ");
+
             throw new IOException("Unexpected code " + e);
         }
     }
