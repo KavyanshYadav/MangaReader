@@ -14,7 +14,7 @@ public class MangareaderApp extends  Application{
         OkHttpClient client = new OkHttpClient.Builder().build();
         Picasso.Builder builder = new Picasso.Builder(this);
         builder.downloader(new OkHttp3Downloader(client));
-        builder.addRequestHandler(new CustomrequestHandler(client));
+        builder.addRequestHandler(new CustomrequestHandler(this,client));
         Picasso.setSingletonInstance(builder.build());
     }
 }

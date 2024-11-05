@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         TextView password = findViewById(R.id.password);
         Button googlebtn = findViewById(R.id.googlelogin);
 
+
         googlebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,36 +74,18 @@ public class MainActivity extends AppCompatActivity {
         second.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MainActivity2.class);
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+//                startActivity(intent);
+                SiginWithEmailandPassword("k@gmail.com","123456");
+
+
             }
         });
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String emailText = email.getText().toString();
-                String passwordText = password.getText().toString();
-                if (emailText.isEmpty() || passwordText.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "Please enter email and password.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                mAuth.signInWithEmailAndPassword(emailText, passwordText)
-                        .addOnCompleteListener(MainActivity.this, task -> {
-                            if (task.isSuccessful()) {
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                updateUI(user);
-                            } else {Exception exception = task.getException();
-                                if (exception instanceof FirebaseAuthInvalidUserException) {
-                                    Toast.makeText(MainActivity.this, "User does not exist.", Toast.LENGTH_SHORT).show();
-                                } else if (exception instanceof FirebaseAuthInvalidCredentialsException) {
-                                    Toast.makeText(MainActivity.this, "Invalid credentials.", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(MainActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                                }
-                                updateUI(null);
-                            }
-                        });
+                SiginWithEmailandPassword(email.getText().toString(),password.getText().toString());
             }
         });
 
@@ -153,6 +137,32 @@ public class MainActivity extends AppCompatActivity {
     private  void   siginWithGoogle() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    public void SiginWithEmailandPassword(String email,String password)
+    {
+        String emailText = email.toString();
+        String passwordText = password.toString();
+        if (emailText.isEmpty() || passwordText.isEmpty()) {
+            Toast.makeText(MainActivity.this, "Please enter email and password.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        mAuth.signInWithEmailAndPassword(emailText, passwordText)
+                .addOnCompleteListener(MainActivity.this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        updateUI(user);
+                    } else {Exception exception = task.getException();
+                        if (exception instanceof FirebaseAuthInvalidUserException) {
+                            Toast.makeText(MainActivity.this, "User does not exist.", Toast.LENGTH_SHORT).show();
+                        } else if (exception instanceof FirebaseAuthInvalidCredentialsException) {
+                            Toast.makeText(MainActivity.this, "Invalid credentials.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                        }
+                        updateUI(null);
+                    }
+                });
     }
 
     private void updateUI(FirebaseUser user) {

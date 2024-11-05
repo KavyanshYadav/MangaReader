@@ -11,8 +11,8 @@
 
     <Button
         android:id="@+id/nextbtn"
-        android:layout_width="111dp"
-        android:layout_height="56dp"
+        android:layout_width="141dp"
+        android:layout_height="63dp"
         android:layout_marginTop="41dp"
         android:layout_marginBottom="84dp"
         android:text="login"
@@ -20,14 +20,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button2"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.058" />
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="100dp"
-        android:layout_height="61dp"
+        android:layout_width="144dp"
+        android:layout_height="60dp"
         android:layout_marginTop="36dp"
-        android:text="about"
+        android:text="guestLogin"
         app:layout_constraintEnd_toStartOf="@+id/nextbtn"
         app:layout_constraintHorizontal_bias="0.522"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +55,8 @@
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:inputType="text"
+                android:textColor="#FFFFFF" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -70,7 +71,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="password"
-                android:inputType="text" />
+                android:inputType="text"
+                android:textColor="#FFFFFF" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

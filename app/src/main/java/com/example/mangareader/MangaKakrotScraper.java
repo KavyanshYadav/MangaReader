@@ -149,7 +149,37 @@ public class MangaKakrotScraper {
         return mainreturn;
     }
 
+    public ArrayList<LessinformationSchema> SearchManga (String HTML) throws IOException , InterruptedException {
+        Document doc = Jsoup.parse(HTML);
+        System.out.println("seachning manga");
+        // LessinformationSchema mainrreturnn = new LessinformationSchema("HTML", "HTML", "HTML", "HTML", "HTML", 0);
+        Elements dof = doc.getElementsByClass("search-story-item");
+        ArrayList<LessinformationSchema> mainreturn = new ArrayList<>();
 
+        for(Element n : dof){
+
+            try {
+                String href = n.selectFirst("a").attr("href");
+
+                String[] parts = href.split("-");
+                String ID = parts[parts.length - 1];
+                String Imageurl = n.select("a > img").attr("src");
+
+                String Title = n.selectFirst("div.item-right > h3 > a").text();
+                String Author = n.selectFirst("div.item-right > span").text() ;
+                mainreturn.add(new LessinformationSchema(ID, Title, Imageurl, Title, Author, 0));
+            } catch (Exception e) {
+                System.err.println(e);
+                continue;
+
+                // TODO: handle exception
+            }
+
+
+        }
+        return mainreturn;
+
+    }
     public MoreinformationSchema GetMangaInfo (String Html) throws IOException , InterruptedException {
         Document doc = Jsoup.parse(Html);
         MoreinformationSchema mainreturn = new MoreinformationSchema("", "", "Html", "Html", "Html", 0, null, "Html", "Html", "Html", "Html", null, 0);

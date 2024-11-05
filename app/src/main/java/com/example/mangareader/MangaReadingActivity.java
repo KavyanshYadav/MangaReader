@@ -8,7 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,6 +47,7 @@ import okhttp3.OkHttpClient;
 public class MangaReadingActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MangaImageAdapter mangaImageAdapter;
+    private boolean isVertical = true;
     public class CustomImageModel {
         private String url;
 
@@ -141,6 +145,8 @@ public class MangaReadingActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             String imageUrl = imageUrls.get(position);
+            int width = holder.mangaImageView.getWidth();
+            int height = holder.mangaImageView.getHeight();
             Picasso.get()
                     .load(imageUrl)
                     .into(holder.mangaImageView);
@@ -198,8 +204,44 @@ public class MangaReadingActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Switch toggleSwitch = findViewById(R.id.switch1);
+        toggleSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isVertical = !isVertical;
+            updateRecyclerViewOrientation();
+        });
+        LinearLayoutManager na = new LinearLayoutManager(this);
+        na.setItemPrefetchEnabled(true); // Enable item prefetching
+        na.setInitialPrefetchItemCount(6);
+        na.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(na);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                // Assuming a LinearLayoutManager or GridLayoutManager
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (layoutManager != null) {
+                    // Get the first and last completely visible items
+                    int firstVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
+                    int lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition();
+
+                    // Calculate the visible range size
+                    int visibleRangeSize = lastVisibleItemPosition - firstVisibleItemPosition + 1;
+
+                    // Get the current middle position within the visible range
+                    int middlePosition = (firstVisibleItemPosition + lastVisibleItemPosition) / 2;
+
+                    // Calculate percentage within the visible range
+                    float rangePercentage = ((float) (middlePosition - firstVisibleItemPosition) / visibleRangeSize) * 100;
+
+                    // Log or use the range percentage as needed
+                    Log.d("RangePercentage", "User is viewing " + rangePercentage + "% of the visible range");
+                }
+            }
+        });
+
 //         Register the custom request handler with Picasso
 
 
@@ -211,5 +253,13 @@ public class MangaReadingActivity extends AppCompatActivity {
             Toast.makeText(MangaReadingActivity.this, "Failed to fetch chapter information", Toast.LENGTH_SHORT).show();
         }
 
+    }
+    private void updateRecyclerViewOrientation() {
+        int orientation = isVertical ? RecyclerView.VERTICAL : RecyclerView.HORIZONTAL;
+        LinearLayoutManager LayoutManger = new LinearLayoutManager(this,orientation,false);
+        LayoutManger.setItemPrefetchEnabled(true); // Enable item prefetching
+        LayoutManger.setInitialPrefetchItemCount(6);
+
+        recyclerView.setLayoutManager(LayoutManger);
     }
 }

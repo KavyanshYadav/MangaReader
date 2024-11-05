@@ -25,6 +25,8 @@ import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +79,7 @@ public class MainActivity3 extends AppCompatActivity {
         }
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,12 +120,56 @@ public class MainActivity3 extends AppCompatActivity {
 
             return true;
         });
+        Button SearchBtn = findViewById(R.id.SearchBtn);
+        TextView SearchText = findViewById(R.id.SearchText);
+        SearchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String searchText = SearchText.getText().toString();
+                if (!searchText.isEmpty()) {
+                    Intent goToSearch = new Intent(MainActivity3.this,SearchActivity.class);
+                    goToSearch.putExtra("searchText",searchText);
+                    startActivity(goToSearch);
+                }else {
+                    Toast.makeText(MainActivity3.this, "Please enter a search query", Toast.LENGTH_SHORT).show();
+                }
+//                Intent intent = new Intent(MainActivity3.this, SearchActivity.class);
+//                startActivity(intent);
+            }
+        });
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         // Initialize adapter with empty list
-        adapter = new ImageAdapter(this, new ArrayList<>(),new ArrayList<>());
+        adapter = new ImageAdapter(this, this, new ArrayList<>(),new ArrayList<>());
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                // Check if the LayoutManager is a LinearLayoutManager (or GridLayoutManager, which extends it)
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (layoutManager != null) {
+                    // Get the total number of items in the RecyclerView
+                    int totalItemCount = layoutManager.getItemCount();
+
+                    // Get the position of the first and last visible items
+                    int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                    int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+
+                    // Calculate the middle position of the currently visible items
+                    int middlePosition = (firstVisibleItemPosition + lastVisibleItemPosition) / 2;
+
+                    // Calculate the percentage of the user's scroll progress
+                    float scrollPercentage = ((float) middlePosition / totalItemCount) * 100;
+
+                    // Log or use the scroll percentage as needed
+                    Log.d("ScrollPercentage", "User is viewing " + scrollPercentage + "% of the list");
+                }
+            }
+        });
+
 
         // Fetch chapters (including image URLs)
         new FetchChaptersTask().execute("https://manganato.com/");

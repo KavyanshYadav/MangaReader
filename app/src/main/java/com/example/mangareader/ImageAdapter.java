@@ -1,5 +1,8 @@
 package com.example.mangareader;
 
+import static java.util.Collections.emptyList;
+
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
@@ -24,11 +27,13 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     private List<String> imageUrls;
     private Context context;
     private List<String> imageID;
+    private Activity activity;
 
-    public ImageAdapter(Context context, List<String> imageUrls,List<String> imageIDs) {
+    public ImageAdapter(Context context, Activity activity, List<String> imageUrls, List<String> imageIDs) {
         this.context = context;
-        this.imageUrls = new ArrayList<>(imageUrls);
-        this.imageID = new ArrayList<>(imageIDs);
+        this.activity = activity;
+        this.imageUrls = new ArrayList<>();
+        this.imageID = new ArrayList<>();
     }
 
     public void updateImageUrls(List<String> newImageUrls,List<String> newImageID) {
@@ -64,10 +69,11 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             // Pass image URL
 
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
-                    (MainActivity3) context,  // Cast to MainActivity3 if necessary
-                    holder.imageView,
-                    "shared"
+                   activity,  // Cast context to Activity (or your specific activity, if needed)
+                    holder.imageView,    // The view to share in the transition
+                    "shared"             // The transition name defined in both activities
             );
+
             context.startActivity(intent, options.toBundle());
         });
     }

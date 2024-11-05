@@ -51,6 +51,7 @@ dependencies {
     implementation ("androidx.recyclerview:recyclerview:1.2.1")
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     implementation ("com.squareup.picasso:picasso:2.8")
+    implementation(libs.legacy.support.v4)
 //    implementation ("com.github.Chalifa:PhotoView:2.3.0")
 
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")

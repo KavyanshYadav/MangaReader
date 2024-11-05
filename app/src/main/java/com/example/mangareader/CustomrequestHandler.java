@@ -1,26 +1,38 @@
-package  com.example.mangareader;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestHandler;
-import com.squareup.picasso.Request;
-import com.squareup.picasso.Picasso.LoadedFrom;
+package com.example.mangareader;
+
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Request;
+import com.squareup.picasso.RequestHandler;
+import com.squareup.picasso.Picasso.LoadedFrom;
+
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.Request.Builder;
-import okhttp3.ResponseBody;
-import okhttp3.Call;
 import okhttp3.Response;
+import okhttp3.Call;
+import okhttp3.ResponseBody;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class CustomrequestHandler extends RequestHandler {
 
-    private OkHttpClient client;
+    private final OkHttpClient client;
+    private final Context context;
 
-    public CustomrequestHandler(OkHttpClient client) {
+    public CustomrequestHandler(Context context, OkHttpClient client) {
+        this.context = context;
         this.client = client;
+
+        // Set up OkHttp cache with the cache directory from context
+        File httpCacheDirectory = new File(context.getCacheDir(), "picasso-cache");
+        Cache cache = new Cache(httpCacheDirectory, 50 * 1024 * 1024); // 50 MB cache size
+        client.newBuilder().cache(cache).build();
     }
 
     @Override
@@ -53,7 +65,7 @@ public class CustomrequestHandler extends RequestHandler {
 
         // Execute the request
         Call call = client.newCall(builder.build());
-        Response response = call.execute(); // Use the Response class from OkHttp
+        Response response = call.execute();
 
         // Handle the response
         ResponseBody responseBody = response.body();

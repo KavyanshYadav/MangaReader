@@ -24,14 +24,84 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MangaDetail extends AppCompatActivity {
     private RecyclerView recyclerViewChapters;
     private ChapterViewAdapter chapterViewAdapter;
+    private List<MangaKakrotScraper.ChapterInfo> chapterss = new ArrayList<>();
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_manga_detail);
+
+        // Apply window insets for edge-to-edge layout
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        // Initialize RecyclerView and Adapter
+        recyclerViewChapters = findViewById(R.id.recyclerView);
+        recyclerViewChapters.setLayoutManager(new LinearLayoutManager(this));
+        chapterViewAdapter = new ChapterViewAdapter(this, chapterss);
+        recyclerViewChapters.setAdapter(chapterViewAdapter);
+
+        // Load and display the manga cover image
+        ImageView imageView = findViewById(R.id.imageView);
+        String imageUrl = getIntent().getStringExtra("imageUrl");
+        String imageId = getIntent().getStringExtra("imageID");
+        Glide.with(this)
+                .load(imageUrl)
+                .centerCrop()
+                .into(imageView);
+
+        // Fetch chapter information using AsyncTask
+        new FetchChapterInformation().execute(imageId);
+    }
+
+    ObjectMapper JSON = new ObjectMapper();
+
+    // Fetch data asynchronously
+    private class FetchChapterInformation extends AsyncTask<String, Void, MangaKakrotScraper.MoreinformationSchema> {
+        @Override
+        protected MangaKakrotScraper.MoreinformationSchema doInBackground(String... MangaID) {
+            HttpRes httpRes = new HttpRes();
+            try {
+                Log.d("MangaReader1", "GetMangaId: " + MangaID[0]);
+                return httpRes.getMangaDetails(MangaID[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(MangaKakrotScraper.MoreinformationSchema result) {
+            TextView MangaName = findViewById(R.id.MangaName);
+            if (result != null) {
+                MangaName.setText(result.Title);
+
+                // Update the adapter’s data and refresh RecyclerView
+                chapterViewAdapter.SetChapter(result.chapters);
+                chapterViewAdapter.notifyDataSetChanged();
+
+                try {
+                    Log.d("MangaReader1", "resultID: " + JSON.writeValueAsString(result));
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                Log.d("MangaReader1", "No recent chapters found or failed to fetch.");
+            }
+        }
+    }
+
+    // Adapter class for RecyclerView
     public class ChapterViewAdapter extends RecyclerView.Adapter<ChapterViewAdapter.ViewHolder> {
-
         private List<MangaKakrotScraper.ChapterInfo> chapters;
         private Context context;
 
@@ -47,6 +117,10 @@ public class MangaDetail extends AppCompatActivity {
             return new ViewHolder(view);
         }
 
+        public void SetChapter(List<MangaKakrotScraper.ChapterInfo> chapters) {
+            this.chapters = chapters;
+        }
+
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             MangaKakrotScraper.ChapterInfo chapter = chapters.get(position);
@@ -55,10 +129,10 @@ public class MangaDetail extends AppCompatActivity {
             holder.chapterViews.setText("Views: " + chapter.View);
 
             holder.itemView.setOnClickListener(v -> {
-              Log.d("MangaReader1", "ChapterUrl: " + chapter.href);
+                Log.d("MangaReader1", "ChapterUrl: " + chapter.href);
                 Intent intent = new Intent(context, MangaReadingActivity.class);
-                intent.putExtra("ChapterUrl",chapter.href);
-                startActivity(intent);
+                intent.putExtra("ChapterUrl", chapter.href);
+                context.startActivity(intent);
             });
         }
 
@@ -77,68 +151,5 @@ public class MangaDetail extends AppCompatActivity {
                 chapterViews = itemView.findViewById(R.id.chapterViews);
             }
         }
-    }
-
-
-
-    ObjectMapper JSON = new ObjectMapper();
-    private class FetchChapterInformation extends AsyncTask<String, Void, MangaKakrotScraper.MoreinformationSchema> {
-        @Override
-        protected MangaKakrotScraper.MoreinformationSchema doInBackground(String... MangaID) {
-            HttpRes httpRes = new HttpRes();
-            try {
-                Log.d("MangaReader1", "GetMangaId: " + MangaID[0]);
-                return httpRes.getMangaDetails(MangaID[0]);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-        @Override
-        protected void onPostExecute(MangaKakrotScraper.MoreinformationSchema result) {
-            TextView MangaName = findViewById(R.id.MangaName);
-            if (result !=null){
-                MangaName.setText(result.Title);
-                chapterViewAdapter = new ChapterViewAdapter(MangaDetail.this, result.chapters);
-                recyclerViewChapters.setAdapter(chapterViewAdapter);
-
-                result.chapters.forEach(chapter -> {
-//                    Log.d("MangaReader1", "Chapter: " + chapter.ChapterTitle);
-                });
-                try {
-                    Log.d("MangaReader1", "resultID: " + JSON.writeValueAsString(result) );
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            else {
-                Log.d("MangaReader1", "No recent chapters found or failed to fetch.");
-            }
-        }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Ensure EdgeToEdge.enable(this) is valid, or remove it if unnecessary.
-        setContentView(R.layout.activity_manga_detail);
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        recyclerViewChapters = findViewById(R.id.recyclerView);
-        recyclerViewChapters.setLayoutManager(new LinearLayoutManager(this));
-        ImageView imageView = findViewById(R.id.imageView);
-        String imageUrl = getIntent().getStringExtra("imageUrl");
-        String imageId = getIntent().getStringExtra("imageID");
-        Glide.with(this)
-                .load(imageUrl)
-                .centerCrop()
-                .into(imageView);
-
-        // Correct placement and syntax for executing the AsyncTask
-        new FetchChapterInformation().execute(imageId);
     }
 }

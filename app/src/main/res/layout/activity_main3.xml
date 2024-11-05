@@ -6,20 +6,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#101010"
+    android:filterTouchesWhenObscured="true"
+    android:fitsSystemWindows="true"
     tools:context=".MainActivity3">
 
-    <TextView
-        android:id="@+id/username"
-        android:layout_width="420dp"
-        android:layout_height="123dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="serif"
-        android:paddingLeft="40dp"
-        android:text="TextView"
-        android:textColor="#FFFFFF"
-        android:textSize="34sp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="-5dp" />
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/SearchBtn"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:background="#242424"
+            android:backgroundTint="#2E2E2E"
+            android:textColorLink="#232323"
+            app:icon="@android:drawable/ic_menu_search" />
+
+        <EditText
+            android:id="@+id/SearchText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text"
+            android:text="Name"
+            android:textColor="#FAFAFA" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -27,9 +44,11 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:scrollbars="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        app:layout_constraintVertical_bias="0.0" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -54,7 +73,6 @@
             app:menu="@menu/bottom_menu" />
 
     </RelativeLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

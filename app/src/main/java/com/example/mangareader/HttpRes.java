@@ -100,6 +100,29 @@ public class HttpRes {
         }
     }
 
+    public ArrayList<MangaKakrotScraper.LessinformationSchema> getSearch(String Search) throws IOException, InterruptedException {
+        String encodedSearch = Search.replace(" ", "_");
+        System.out.println(encodedSearch);
+        Log.d("MangaReader1","https://manganato.com/search/story/" + encodedSearch);
+        Request request = new Request.Builder()
+                .url("https://manganato.com/search/story/" + encodedSearch)
+                .get()
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+            // Ensure a non-null return
+            ArrayList<MangaKakrotScraper.LessinformationSchema> retu = scraper.SearchManga(response.body().string());
+            Log.d("MangaReader1", "Result: " + retu.get(0).Title);
+            return retu ;
+        }catch (Exception e) {
+//            Log.d("MangaReader1", "failed to fetch ");
+
+            throw new IOException("Unexpected code " + e);
+        }
+
+    }
+
 
     public byte[] getImage(String url) throws IOException {
         Request request = new Request.Builder()
